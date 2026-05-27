@@ -1,6 +1,12 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY ?? '')
+function getResend() {
+  const key = process.env.RESEND_API_KEY
+  if (!key) {
+    throw new Error('RESEND_API_KEY nao configurado')
+  }
+  return new Resend(key)
+}
 
 function formatDateBR(dateString: string): string {
   const date = new Date(dateString + 'T12:00:00')
@@ -58,7 +64,7 @@ export async function sendTaskExpirationEmail({
     subject: `Tarefa próxima do vencimento: ${taskTitle}`,
   })
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResend().emails.send({
     from: 'TaskFlow <onboarding@resend.dev>',
     to,
     subject: `Tarefa próxima do vencimento: ${taskTitle}`,

@@ -87,39 +87,37 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mb-6 flex items-center gap-3">
-          <Button
-            variant="outline"
-            className="text-xs gap-2"
-            disabled={emailLoading}
-            onClick={async () => {
-              setEmailLoading(true)
-              setEmailResult(null)
-              try {
-                const res = await fetch('/api/tasks/check-expiring', {
-                  headers: { Authorization: `Bearer cron_taskflow_secret_2026` },
-                })
-                const json = await res.json()
-                setEmailResult(json.success ? `Enviados: ${json.sent} | Falhas: ${json.failed} | Verificadas: ${json.checked}` : `Erro: ${json.error}`)
-              } catch {
-                setEmailResult('Erro ao conectar com a rota')
-              }
-              setEmailLoading(false)
-            }}
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-            </svg>
-            {emailLoading ? 'Verificando...' : 'Testar alertas de vencimento'}
-          </Button>
-          {emailResult && (
-            <span className={`text-xs font-medium ${emailResult.startsWith('Enviados') ? 'text-emerald-600' : 'text-rose-600'}`}>
-              {emailResult}
-            </span>
-          )}
-        </div>
-      )}
+      <div className="mb-6 flex items-center gap-3">
+        <Button
+          variant="outline"
+          className="text-xs gap-2"
+          disabled={emailLoading}
+          onClick={async () => {
+            setEmailLoading(true)
+            setEmailResult(null)
+            try {
+              const res = await fetch('/api/tasks/check-expiring', {
+                headers: { Authorization: `Bearer cron_taskflow_secret_2026` },
+              })
+              const json = await res.json()
+              setEmailResult(json.success ? `Enviados: ${json.sent} | Falhas: ${json.failed} | Verificadas: ${json.checked}` : `Erro: ${json.error}`)
+            } catch {
+              setEmailResult('Erro ao conectar com a rota')
+            }
+            setEmailLoading(false)
+          }}
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+          {emailLoading ? 'Verificando...' : 'Testar alertas de vencimento'}
+        </Button>
+        {emailResult && (
+          <span className={`text-xs font-medium ${emailResult.startsWith('Enviados') ? 'text-emerald-600' : 'text-rose-600'}`}>
+            {emailResult}
+          </span>
+        )}
+      </div>
 
       <section className="mb-10">
         <div className="flex items-center justify-between mb-4">
